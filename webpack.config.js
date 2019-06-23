@@ -2,6 +2,7 @@ const webpack = require('webpack');
 const Dotenv = require('dotenv-webpack');
 const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 require('dotenv').config()
 
@@ -11,13 +12,15 @@ const entry = {
 
 const output = {
     path: path.resolve(__dirname, 'public'),
-    filename: './bundle.js'
+    filename: './bundle.js',
+    publicPath: process.env.ASSET_PATH || '/'
 }
 
 const devServer = {
     host: process.env.HOST || 'localhost',
     port: process.env.PORT|| '3000',
-    contentBase: './public'
+    contentBase: './public',
+    historyApiFallback: true
 }
 
 const resolve = {
@@ -50,6 +53,9 @@ const _module = {
 }
 
 const plugins = [
+    new HtmlWebpackPlugin({
+        template: './public/index.html'
+    }),
     new Dotenv(),
     new MiniCssExtractPlugin({
         filename: '[name].css'
